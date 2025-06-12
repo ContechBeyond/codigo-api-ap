@@ -2,54 +2,30 @@ import React, { useEffect, useState } from "react";
 
 function CodigoPin() {
   const [pin, setPin] = useState("");
-  const [secondsLeft, setSecondsLeft] = useState(0);
 
   const fetchPin = () => {
     fetch("https://pin-backend-byla.onrender.com/pin")
       .then(res => res.json())
       .then(data => {
         console.log("PIN recibido:", data.pin);
-        setPin(data.pin);  // <--- Actualiza el estado aquí
+        setPin(data.pin);
       })
-      .catch(err => console.error("Error fetch PIN:", err));
-  };
-
-  const calculateSecondsLeft = () => {
-    const now = new Date();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const minutesPassed = minutes % 5;
-    const secondsPassed = minutesPassed * 60 + seconds;
-    const secondsUntilNextChange = 5 * 60 - secondsPassed;
-    setSecondsLeft(secondsUntilNextChange);
+      .catch(err => console.error("Error al obtener el PIN:", err));
   };
 
   useEffect(() => {
-    fetchPin();
-    calculateSecondsLeft();
+    fetchPin(); // obtener el PIN al cargar
+    const interval = setInterval(fetchPin, 5 * 60 * 1000); // cada 5 min
 
-    const pinInterval = setInterval(fetchPin, 5 * 60 * 1000);
-    const timerInterval = setInterval(calculateSecondsLeft, 1000);
-
-    return () => {
-      clearInterval(pinInterval);
-      clearInterval(timerInterval);
-    };
+    return () => clearInterval(interval); // limpiar intervalo si el componente se desmonta
   }, []);
-
-  const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = (seconds % 60).toString().padStart(2, "0");
-    return `${m}:${s}`;
-  };
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>PIN actual:</h1>
-      <p style={{ fontSize: "2.5rem", fontWeight: "bold" }}>{pin}</p>
-      <p>Nuevo PIN en: {formatTime(secondsLeft)}</p>
+      <p style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
+        {pin || "Cargando..."}
+      </p>
     </div>
   );
 }

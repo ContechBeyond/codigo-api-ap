@@ -1,10 +1,13 @@
 import React from "react";
-import CodigoPin from "./CodigoPin"; // Ajusta el path si está en otra carpeta
+import "./App.css";
+import CodigoPin from "./CodigoPin";
 
 function App() {
   return (
     <div className="App">
-      <CodigoPin />
+      <header className="App-header">
+        <CodigoPin />
+      </header>
     </div>
   );
 }
