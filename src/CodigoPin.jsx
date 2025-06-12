@@ -6,11 +6,12 @@ function CodigoPin() {
 
   const fetchPin = () => {
     fetch("https://pin-backend-byla.onrender.com/pin")
-  .then(res => res.json())
-  .then(data => {
-    console.log("PIN recibido:", data.pin);
-    // aquí actualizas estado o lo que necesites
-  });
+      .then(res => res.json())
+      .then(data => {
+        console.log("PIN recibido:", data.pin);
+        setPin(data.pin);  // <--- Actualiza el estado aquí
+      })
+      .catch(err => console.error("Error fetch PIN:", err));
   };
 
   const calculateSecondsLeft = () => {
