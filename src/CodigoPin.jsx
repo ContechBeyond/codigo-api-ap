@@ -16,8 +16,7 @@ function CodigoPin() {
 
   useEffect(() => {
     // Conectar al servidor de Socket.IO
-    //const socket = io("https://pin-backend-byla.onrender.com");
-    const socket = io("localhost:10000");
+    const socket = io("https://pin-backend-byla.onrender.com");
 
     // Manejar la conexión exitosa
     socket.on("connect", () => {
